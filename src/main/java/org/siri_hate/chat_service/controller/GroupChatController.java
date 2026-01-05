@@ -23,7 +23,6 @@ public class GroupChatController {
     public ResponseEntity<GroupChatResponse> createGroupChat(@RequestBody GroupChatRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String creatorUsername = authentication.getName();
-
         GroupChatResponse response = groupChatService.createGroupChat(request, creatorUsername);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
@@ -35,10 +34,7 @@ public class GroupChatController {
     }
 
     @PutMapping("/{id}/name")
-    public ResponseEntity<GroupChatResponse> updateGroupChatName(
-            @PathVariable Long id,
-            @RequestParam String newName
-    ) {
+    public ResponseEntity<GroupChatResponse> updateGroupChatName(@PathVariable Long id, @RequestParam String newName) {
         GroupChatResponse response = groupChatService.updateGroupChatName(id, newName);
         return ResponseEntity.ok(response);
     }

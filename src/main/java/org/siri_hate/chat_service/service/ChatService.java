@@ -1,6 +1,5 @@
 package org.siri_hate.chat_service.service;
 
-import org.siri_hate.chat_service.model.entity.Chat;
 import org.siri_hate.chat_service.repository.ChatRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,8 +23,7 @@ public class ChatService {
         chatRepository.deleteById(chatId);
     }
 
-    public Chat getChatById(Long chatId) {
-        return chatRepository.findById(chatId)
-                .orElseThrow(() -> new RuntimeException("Chat with id " + chatId + " not found"));
+    public void getChatById(Long chatId) {
+        chatRepository.findById(chatId).orElseThrow(() -> new RuntimeException("Chat with id " + chatId + " not found"));
     }
 } 

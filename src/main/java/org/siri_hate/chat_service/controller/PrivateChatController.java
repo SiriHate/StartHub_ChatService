@@ -44,7 +44,6 @@ public class PrivateChatController {
     public ResponseEntity<Void> togglePrivateChatVisibility(@PathVariable Long id) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-
         privateChatService.togglePrivateChatVisibility(id, username);
         return ResponseEntity.noContent().build();
     }

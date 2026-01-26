@@ -1,14 +1,12 @@
 package org.siri_hate.chat_service.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "users")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@Table(
+        name = "users",
+        indexes = @Index(name = "username_idx",  columnList="username", unique = true)
+)
 public class User {
 
     @Id

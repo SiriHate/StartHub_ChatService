@@ -25,36 +25,22 @@ val logbackClassicVersion = "1.5.18"
 val logbackCoreVersion = "1.5.20"
 
 dependencies {
-
-    // --- Spring Boot ---
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-websocket")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-validation")
-
-    // --- Kafka ---
     implementation("org.springframework.kafka:spring-kafka")
-
-    // --- Database ---
     runtimeOnly("org.postgresql:postgresql")
-
-    // --- JWT ---
     implementation("io.jsonwebtoken:jjwt-api:$jjwtVersion")
     runtimeOnly("io.jsonwebtoken:jjwt-impl:$jjwtVersion")
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:$jjwtVersion")
-
-    // --- MapStruct ---
     implementation("org.mapstruct:mapstruct:$mapstructVersion")
     annotationProcessor("org.mapstruct:mapstruct-processor:$mapstructVersion")
-
-    // --- Logging ---
     implementation("net.logstash.logback:logstash-logback-encoder:$logstashEncoderVersion")
     implementation("ch.qos.logback:logback-classic:$logbackClassicVersion")
     implementation("ch.qos.logback:logback-access:$logbackClassicVersion")
     implementation("ch.qos.logback:logback-core:$logbackCoreVersion")
-
-    // --- Tests ---
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.kafka:spring-kafka-test")
     testImplementation("org.springframework.security:spring-security-test")

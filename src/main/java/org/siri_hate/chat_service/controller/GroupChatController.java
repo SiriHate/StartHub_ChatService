@@ -44,4 +44,4 @@ public class GroupChatController {
         groupChatService.deleteGroupChat(id);
         return ResponseEntity.noContent().build();
     }
-} 
+}

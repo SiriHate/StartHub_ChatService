@@ -27,17 +27,9 @@ public class Message {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "chat_id", insertable = false, updatable = false)
-    @JsonIgnore
     private Chat chat;
 
     public Message() {
-        this.timestamp = LocalDateTime.now();
-    }
-
-    public Message(String sender, String content, Long chatId) {
-        this.sender = sender;
-        this.content = content;
-        this.chatId = chatId;
         this.timestamp = LocalDateTime.now();
     }
 

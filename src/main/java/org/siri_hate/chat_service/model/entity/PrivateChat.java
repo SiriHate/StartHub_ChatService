@@ -30,12 +30,6 @@ public class PrivateChat extends Chat {
     public PrivateChat() {
     }
 
-    public PrivateChat(Long id, List<Message> messages, User user1, User user2) {
-        super(id, messages);
-        this.user1 = user1;
-        this.user2 = user2;
-    }
-
     public User getUser1() {
         return user1;
     }

@@ -16,17 +16,7 @@ public class GroupChat extends Chat {
   @OneToMany(mappedBy = "chat", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<GroupChatParticipant> groupParticipants = new HashSet<>();
 
-  public GroupChat() {
-  }
-
-  public GroupChat(String name) {
-    this.name = name;
-  }
-
-  public GroupChat(String name, Set<GroupChatParticipant> groupParticipants) {
-    this.name = name;
-    this.groupParticipants = groupParticipants;
-  }
+  public GroupChat() {}
 
   public String getName() {
     return name;

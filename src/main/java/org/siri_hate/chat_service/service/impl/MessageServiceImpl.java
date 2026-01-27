@@ -1,4 +1,4 @@
-package org.siri_hate.chat_service.service;
+package org.siri_hate.chat_service.service.impl;
 
 import org.siri_hate.chat_service.model.dto.request.MessageRequest;
 import org.siri_hate.chat_service.model.entity.Message;
@@ -11,13 +11,13 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-public class MessageService {
+public class MessageServiceImpl {
 
     private final MessageRepository messageRepository;
     private final ChatRepository chatRepository;
 
     @Autowired
-    public MessageService(MessageRepository messageRepository, ChatRepository chatRepository) {
+    public MessageServiceImpl(MessageRepository messageRepository, ChatRepository chatRepository) {
         this.messageRepository = messageRepository;
         this.chatRepository = chatRepository;
     }

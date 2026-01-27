@@ -2,7 +2,7 @@ package org.siri_hate.chat_service.controller;
 
 import org.siri_hate.chat_service.model.dto.request.private_chat.PrivateChatRequest;
 import org.siri_hate.chat_service.model.dto.response.private_chat.PrivateChatResponse;
-import org.siri_hate.chat_service.service.PrivateChatService;
+import org.siri_hate.chat_service.service.impl.PrivateChatServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/chat_service/private_chats")
 public class PrivateChatController {
 
-    private final PrivateChatService privateChatService;
+    private final PrivateChatServiceImpl privateChatServiceImpl;
 
-    public PrivateChatController(PrivateChatService privateChatService) {
-        this.privateChatService = privateChatService;
+    public PrivateChatController(PrivateChatServiceImpl privateChatServiceImpl) {
+        this.privateChatServiceImpl = privateChatServiceImpl;
     }
 
     @PostMapping
@@ -24,19 +24,19 @@ public class PrivateChatController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String firstUsername = authentication.getName();
 
-        PrivateChatResponse response = privateChatService.createPrivateChat(request, firstUsername);
+        PrivateChatResponse response = privateChatServiceImpl.createPrivateChat(request, firstUsername);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<PrivateChatResponse> getPrivateChatById(@PathVariable Long id) {
-        PrivateChatResponse response = privateChatService.getPrivateChatById(id);
+        PrivateChatResponse response = privateChatServiceImpl.getPrivateChatById(id);
         return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePrivateChat(@PathVariable Long id) {
-        privateChatService.deletePrivateChat(id);
+        privateChatServiceImpl.deletePrivateChat(id);
         return ResponseEntity.noContent().build();
     }
 
@@ -44,7 +44,7 @@ public class PrivateChatController {
     public ResponseEntity<Void> togglePrivateChatVisibility(@PathVariable Long id) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-        privateChatService.togglePrivateChatVisibility(id, username);
+        privateChatServiceImpl.togglePrivateChatVisibility(id, username);
         return ResponseEntity.noContent().build();
     }
 } 

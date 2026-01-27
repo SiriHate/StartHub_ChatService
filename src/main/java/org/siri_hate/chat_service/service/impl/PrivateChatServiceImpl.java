@@ -1,4 +1,4 @@
-package org.siri_hate.chat_service.service;
+package org.siri_hate.chat_service.service.impl;
 
 import org.siri_hate.chat_service.model.dto.request.private_chat.PrivateChatRequest;
 import org.siri_hate.chat_service.model.dto.response.private_chat.PrivateChatResponse;
@@ -10,19 +10,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class PrivateChatService {
+public class PrivateChatServiceImpl {
 
     private final PrivateChatRepository privateChatRepository;
-    private final UserService userService;
+    private final UserServiceImpl userServiceImpl;
     private final PrivateChatMapper privateChatMapper;
 
-    public PrivateChatService(
+    public PrivateChatServiceImpl(
             PrivateChatRepository privateChatRepository,
-            UserService userService,
+            UserServiceImpl userServiceImpl,
             PrivateChatMapper privateChatMapper
     ) {
         this.privateChatRepository = privateChatRepository;
-        this.userService = userService;
+        this.userServiceImpl = userServiceImpl;
         this.privateChatMapper = privateChatMapper;
     }
 
@@ -35,8 +35,8 @@ public class PrivateChatService {
             throw new RuntimeException("Private chat between users " + firstUsername + " and " + secondUsername + " already exists");
         }
 
-        User firstUser = userService.getOrCreateUser(firstUsername);
-        User secondUser = userService.getOrCreateUser(secondUsername);
+        User firstUser = userServiceImpl.getOrCreateUser(firstUsername);
+        User secondUser = userServiceImpl.getOrCreateUser(secondUsername);
 
         PrivateChat privateChat = new PrivateChat();
         privateChat.setUser1(firstUser);

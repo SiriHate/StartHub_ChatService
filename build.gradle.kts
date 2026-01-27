@@ -1,6 +1,7 @@
 plugins {
-    id("org.springframework.boot") version "3.5.7"
+    id("org.springframework.boot") version "4.0.2"
     id("io.spring.dependency-management") version "1.1.7"
+    id("org.openapi.generator") version "7.18.0"
     java
 }
 
@@ -44,8 +45,58 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.kafka:spring-kafka-test")
     testImplementation("org.springframework.security:spring-security-test")
+    implementation("io.swagger.core.v3:swagger-annotations:2.2.41")
 }
 
 tasks.withType<Test> {
     useJUnitPlatform()
+}
+
+openApiGenerate {
+    generatorName.set("spring")
+    inputSpec.set("${rootDir}/openapi.yaml")
+    outputDir.set(
+        layout.buildDirectory
+            .dir("generated")
+            .get()
+            .asFile
+            .absolutePath
+    )
+    apiPackage.set("org.siri_hate.main_service.api")
+    modelPackage.set("org.siri_hate.main_service.dto")
+    modelNameSuffix.set("DTO")
+    importMappings.set(
+        mapOf(
+            "Pageable" to "org.springframework.data.domain.Pageable"
+        )
+    )
+    configOptions.set(
+        mapOf(
+            "library" to "spring-boot",
+            "interfaceOnly" to "true",
+            "skipDefaultInterface" to "true",
+            "useTags" to "true",
+            "useBeanValidation" to "true",
+            "useJakartaEe" to "true",
+            "openApiNullable" to "false",
+            "dateLibrary" to "java8",
+            "useSpringController" to "true"
+        )
+    )
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir(layout.buildDirectory.dir("generated/src/main/java"))
+        }
+    }
+}
+
+tasks.compileJava {
+    dependsOn(tasks.openApiGenerate)
+}
+
+tasks.clean {
+    delete(layout.buildDirectory.dir("generated"))
 }

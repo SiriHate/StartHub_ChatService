@@ -1,4 +1,4 @@
-package org.siri_hate.chat_service.service;
+package org.siri_hate.chat_service.service.impl;
 
 import org.siri_hate.chat_service.model.dto.request.group_chat.GroupChatRequest;
 import org.siri_hate.chat_service.model.dto.response.group_chat.GroupChatResponse;
@@ -15,19 +15,19 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-public class GroupChatService {
+public class GroupChatServiceImpl {
 
     private final GroupChatRepository groupChatRepository;
-    private final UserService userService;
+    private final UserServiceImpl userServiceImpl;
     private final GroupChatMapper groupChatMapper;
 
-    public GroupChatService(
+    public GroupChatServiceImpl(
             GroupChatRepository groupChatRepository,
-            UserService userService,
+            UserServiceImpl userServiceImpl,
             GroupChatMapper groupChatMapper
     ) {
         this.groupChatRepository = groupChatRepository;
-        this.userService = userService;
+        this.userServiceImpl = userServiceImpl;
         this.groupChatMapper = groupChatMapper;
     }
 
@@ -42,7 +42,7 @@ public class GroupChatService {
         // Создаем участников с соответствующими ролями
         Set<GroupChatParticipant> participants = request.getParticipantUsernames().stream()
                 .map(username -> {
-                    User user = userService.getOrCreateUser(username);
+                    User user = userServiceImpl.getOrCreateUser(username);
                     GroupChatRole role = username.equals(creatorUsername)
                             ? GroupChatRole.OWNER
                             : GroupChatRole.MEMBER;

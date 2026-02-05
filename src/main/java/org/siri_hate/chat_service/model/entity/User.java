@@ -16,6 +16,12 @@ public class User {
     @Column(nullable = false, unique = true)
     private String username;
 
+    public User() {}
+
+    public User(String username){
+        this.username = username;
+    }
+
     public Long getId() {
         return id;
     }

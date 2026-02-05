@@ -29,6 +29,13 @@ public class Message {
     @JoinColumn(name = "chat_id", insertable = false, updatable = false)
     private Chat chat;
 
+    public Message(String sender, String content, Long chatId) {
+        this.sender = sender;
+        this.content = content;
+        this.timestamp = LocalDateTime.now();;
+        this.chatId = chatId;
+    }
+
     public Message() {
         this.timestamp = LocalDateTime.now();
     }

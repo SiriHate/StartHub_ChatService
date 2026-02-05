@@ -9,11 +9,388 @@ security:
 
 paths:
 
+  /api/v1/chat_service/group_chats:
+    post:
+      tags:
+        - GroupChat
+      summary: Создание группового чата
+      description: Создаёт новый групповой чат от имени текущего пользователя.
+      operationId: createGroupChat
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GroupChatRequest'
+      responses:
+        '201':
+          description: Групповой чат успешно создан
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupChatResponse'
+
+  /api/v1/chat_service/group_chats/{id}:
+    get:
+      tags:
+        - GroupChat
+      summary: Получение группового чата
+      description: Возвращает информацию о групповом чате по его идентификатору.
+      operationId: getGroupChatById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Идентификатор группового чата
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Информация о групповом чате
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupChatResponse'
+    delete:
+      tags:
+        - GroupChat
+      summary: Удаление группового чата
+      description: Удаляет групповой чат по его идентификатору.
+      operationId: deleteGroupChat
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Идентификатор группового чата
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Групповой чат успешно удалён
+
+  /api/v1/chat_service/group_chats/{id}/name:
+    put:
+      tags:
+        - GroupChat
+      summary: Изменение названия группового чата
+      description: Обновляет название группового чата.
+      operationId: updateGroupChatName
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Идентификатор группового чата
+          schema:
+            type: integer
+            format: int64
+        - name: newName
+          in: query
+          required: true
+          description: Новое название чата
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Название чата успешно обновлено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupChatResponse'
+
+  /api/v1/chat_service/private_chats:
+    post:
+      tags:
+        - PrivateChat
+      summary: Создание приватного чата
+      description: Создаёт приватный чат между текущим пользователем и указанным пользователем.
+      operationId: createPrivateChat
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PrivateChatRequest'
+      responses:
+        '201':
+          description: Приватный чат успешно создан
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrivateChatResponse'
+
+  /api/v1/chat_service/private_chats/{id}:
+    get:
+      tags:
+        - PrivateChat
+      summary: Получение приватного чата
+      description: Возвращает информацию о приватном чате.
+      operationId: getPrivateChat
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Идентификатор приватного чата
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Информация о приватном чате
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrivateChatResponse'
+    delete:
+      tags:
+        - PrivateChat
+      summary: Удаление приватного чата
+      description: Удаляет приватный чат.
+      operationId: deletePrivateChat
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Идентификатор приватного чата
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Приватный чат успешно удалён
+
+  /api/v1/chat_service/private_chats/{id}/toggle_visibility:
+    patch:
+      tags:
+        - PrivateChat
+      summary: Переключение видимости приватного чата
+      description: Переключает видимость приватного чата для текущего пользователя.
+      operationId: togglePrivateChatVisibility
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Идентификатор приватного чата
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Видимость чата успешно изменена
+
+  /api/v1/chat_service/users:
+    post:
+      tags:
+        - User
+      summary: Создание пользователя
+      description: Создаёт нового пользователя.
+      operationId: createUser
+      parameters:
+        - name: username
+          in: query
+          required: true
+          description: Уникальное имя пользователя
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Пользователь успешно создан
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+
+  /api/v1/chat_service/users/{userId}:
+    delete:
+      tags:
+        - User
+      summary: Удаление пользователя
+      description: Удаляет пользователя по идентификатору.
+      operationId: deleteUser
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: Идентификатор пользователя
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Пользователь успешно удалён
+
+  /api/v1/chat_service/users/{username}:
+    get:
+      tags:
+        - User
+      summary: Получение пользователя по username
+      description: Возвращает пользователя по его username.
+      operationId: getUserByUsername
+      parameters:
+        - name: username
+          in: path
+          required: true
+          description: Username пользователя
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Информация о пользователе
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
 
 components:
   schemas:
 
+    PrivateChatResponse:
+      type: object
+      description: Ответ с информацией о приватном чате
+      required:
+        - id
+        - participantUsernames
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Уникальный идентификатор приватного чата
+          example: 15
+        participantUsernames:
+          type: array
+          description: Список username участников приватного чата
+          uniqueItems: true
+          items:
+            type: string
+          example:
+            - user1
+            - user2
 
+    UserResponse:
+      type: object
+      description: Пользователь чата
+      required:
+        - id
+        - username
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Уникальный идентификатор пользователя
+          example: 1
+        username:
+          type: string
+          description: Уникальное имя пользователя
+          example: johndoe
+
+    SubscribeRequest:
+      type: object
+      description: Запрос на подписку на чат
+      required:
+        - chatId
+      properties:
+        chatId:
+          type: integer
+          format: int64
+          description: Уникальный идентификатор чата
+
+    ChatRequest:
+      type: object
+      description: Запрос на создание чата (группового или приватного)
+      required:
+        - isGroup
+        - participantUsernames
+      properties:
+        name:
+          type: string
+          description: Название чата (используется для группового чата)
+        isGroup:
+          type: boolean
+          description: Флаг, указывающий является ли чат групповым
+        participantUsernames:
+          type: array
+          description: Список username участников чата
+          items:
+            type: string
+
+    MessageRequest:
+      type: object
+      description: Запрос на отправку сообщения
+      required:
+        - content
+        - chatId
+      properties:
+        content:
+          type: string
+          description: Текст сообщения
+          minLength: 1
+        chatId:
+          type: integer
+          format: int64
+          description: Уникальный идентификатор чата
+
+    PrivateChatRequest:
+      type: object
+      description: Запрос на создание приватного чата
+      properties:
+        secondUsername:
+          type: string
+          description: Username второго участника приватного чата
+
+    GroupChatRequest:
+      type: object
+      description: Запрос на создание группового чата
+      properties:
+        name:
+          type: string
+          description: Название группового чата
+        participantUsernames:
+          type: array
+          description: Список username участников чата
+          items:
+            type: string
+
+    GroupChatResponse:
+      type: object
+      description: Ответ с информацией о групповом чате
+      required:
+        - id
+        - name
+        - participantUsernames
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Уникальный идентификатор чата
+        name:
+          type: string
+          description: Название группового чата
+        participantUsernames:
+          type: array
+          description: Список username участников чата
+          uniqueItems: true
+          items:
+            type: string
+
+    ChatFullRequest:
+      type: object
+      description: Запрос на создание чата (группового или приватного)
+      required:
+        - isGroup
+        - participantUsernames
+      properties:
+        name:
+          type: string
+          description: Название чата (используется для группового чата)
+        isGroup:
+          type: boolean
+          description: Флаг, указывающий является ли чат групповым
+        participantUsernames:
+          type: array
+          description: Список username участников чата
+          items:
+            type: string
 
   securitySchemes:
     bearerAuth:

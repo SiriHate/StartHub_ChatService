@@ -1,12 +1,16 @@
 package org.siri_hate.chat_service.service;
 
+import jakarta.persistence.EntityExistsException;
+import jakarta.persistence.EntityNotFoundException;
 import org.siri_hate.chat_service.model.entity.Chat;
 import org.siri_hate.chat_service.model.entity.PrivateChat;
 import org.siri_hate.chat_service.model.entity.User;
 import org.siri_hate.chat_service.model.entity.group_chat.GroupChat;
+import org.siri_hate.chat_service.model.mapper.UserMapper;
 import org.siri_hate.chat_service.repository.GroupChatRepository;
 import org.siri_hate.chat_service.repository.PrivateChatRepository;
 import org.siri_hate.chat_service.repository.UserRepository;
+import org.siri_hate.main_service.dto.UserResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,16 +24,19 @@ public class UserService {
     private final UserRepository userRepository;
     private final GroupChatRepository groupChatRepository;
     private final PrivateChatRepository privateChatRepository;
+    private final UserMapper userMapper;
 
     @Autowired
     public UserService(
             UserRepository userRepository,
             GroupChatRepository groupChatRepository,
-            PrivateChatRepository privateChatRepository
+            PrivateChatRepository privateChatRepository,
+            UserMapper userMapper
     ) {
         this.userRepository = userRepository;
         this.groupChatRepository = groupChatRepository;
         this.privateChatRepository = privateChatRepository;
+        this.userMapper = userMapper;
     }
 
     @Transactional
@@ -43,27 +50,26 @@ public class UserService {
     }
 
     @Transactional
-    public User createUser(String username) {
+    public UserResponseDTO createUser(String username) {
         if (userRepository.existsByUsername(username)) {
-            throw new RuntimeException("User with username " + username + " already exists");
+            throw new EntityExistsException("User already exists!");
         }
-
-        User user = new User();
-        user.setUsername(username);
-        return userRepository.save(user);
+        var user = new User(username);
+        userRepository.save(user);
+        return userMapper.toUserResponseDTO(user);
     }
 
     @Transactional
     public void deleteUser(Long userId) {
         if (!userRepository.existsById(userId)) {
-            throw new RuntimeException("User with id " + userId + " not found");
+            throw new EntityNotFoundException();
         }
         userRepository.deleteById(userId);
     }
 
-    public User getUserByUsername(String username) {
-        return userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User with username " + username + " not found"));
+    public UserResponseDTO getUserByUsername(String username) {
+        User user = userRepository.findByUsername(username).orElseThrow(EntityNotFoundException::new);
+        return userMapper.toUserResponseDTO(user);
     }
 
     public List<Chat> getChatsByUsername(String username) {

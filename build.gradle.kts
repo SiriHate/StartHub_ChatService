@@ -93,10 +93,10 @@ sourceSets {
     }
 }
 
-tasks.compileJava {
-    dependsOn(tasks.openApiGenerate)
-}
+//tasks.compileJava {
+//    dependsOn(tasks.openApiGenerate)
+//}
 
-tasks.clean {
-    delete(layout.buildDirectory.dir("generated"))
-}
+//tasks.clean {
+//    delete(layout.buildDirectory.dir("generated"))
+//}

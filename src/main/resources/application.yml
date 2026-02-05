@@ -3,15 +3,17 @@ spring:
     name: ChatService
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/chat_service_db
-    username: siri_hate
-    password: admin
+    url: jdbc:postgresql://localhost:5432/chat_service
+    username: user
+    password: pass
     driver-class-name: org.postgresql.Driver
 
   jpa:
     hibernate:
       ddl-auto: update
-
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
   aop:
     proxy-target-class: false
 

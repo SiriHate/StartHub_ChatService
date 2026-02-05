@@ -18,8 +18,7 @@ public abstract class Chat {
     @OneToMany(mappedBy = "chat", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Message> messages = new ArrayList<>();
 
-    public Chat() {
-    }
+    public Chat() {}
 
     public Chat(Long id, List<Message> messages) {
         this.id = id;

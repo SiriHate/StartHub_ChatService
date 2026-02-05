@@ -1,8 +1,9 @@
 package org.siri_hate.chat_service.controller;
 
-import org.siri_hate.chat_service.model.dto.request.group_chat.GroupChatRequest;
-import org.siri_hate.chat_service.model.dto.response.group_chat.GroupChatResponse;
 import org.siri_hate.chat_service.service.GroupChatService;
+import org.siri_hate.main_service.api.GroupChatApi;
+import org.siri_hate.main_service.dto.GroupChatRequestDTO;
+import org.siri_hate.main_service.dto.GroupChatResponseDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -10,8 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/chat_service/group_chats")
-public class GroupChatController {
+public class GroupChatController implements GroupChatApi {
 
     private final GroupChatService groupChatService;
 
@@ -19,29 +19,29 @@ public class GroupChatController {
         this.groupChatService = groupChatService;
     }
 
-    @PostMapping
-    public ResponseEntity<GroupChatResponse> createGroupChat(@RequestBody GroupChatRequest request) {
+    @Override
+    public ResponseEntity<GroupChatResponseDTO> createGroupChat(GroupChatRequestDTO groupChatRequestDTO) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String creatorUsername = authentication.getName();
-        GroupChatResponse response = groupChatService.createGroupChat(request, creatorUsername);
+        var response = groupChatService.createGroupChat(groupChatRequestDTO, creatorUsername);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<GroupChatResponse> getGroupChatById(@PathVariable Long id) {
-        GroupChatResponse response = groupChatService.getGroupChatById(id);
-        return ResponseEntity.ok(response);
-    }
-
-    @PutMapping("/{id}/name")
-    public ResponseEntity<GroupChatResponse> updateGroupChatName(@PathVariable Long id, @RequestParam String newName) {
-        GroupChatResponse response = groupChatService.updateGroupChatName(id, newName);
-        return ResponseEntity.ok(response);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteGroupChat(@PathVariable Long id) {
+    @Override
+    public ResponseEntity<Void> deleteGroupChat(Long id) {
         groupChatService.deleteGroupChat(id);
-        return ResponseEntity.noContent().build();
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @Override
+    public ResponseEntity<GroupChatResponseDTO> getGroupChatById(Long id) {
+        var response = groupChatService.getGroupChatById(id);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<GroupChatResponseDTO> updateGroupChatName(Long id, String newName) {
+        var response = groupChatService.updateGroupChatName(id, newName);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

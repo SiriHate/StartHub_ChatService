@@ -9,175 +9,199 @@ security:
 
 paths:
 
-  /api/v1/chat_service/group_chats:
+  /api/v1/chat_service/chats:
     post:
       tags:
-        - GroupChat
-      summary: Создание группового чата
-      description: Создаёт новый групповой чат от имени текущего пользователя.
-      operationId: createGroupChat
+        - Chat
+      summary: Создание чата
+      description: Создаёт новый чат (групповой или приватный).
+      operationId: createChat
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/GroupChatRequest'
+              $ref: '#/components/schemas/ChatRequest'
       responses:
         '201':
-          description: Групповой чат успешно создан
+          description: Чат успешно создан
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GroupChatResponse'
+                $ref: '#/components/schemas/ChatFullResponse'
 
-  /api/v1/chat_service/group_chats/{id}:
+  /api/v1/chat_service/chats/{id}:
     get:
       tags:
-        - GroupChat
-      summary: Получение группового чата
-      description: Возвращает информацию о групповом чате по его идентификатору.
-      operationId: getGroupChatById
+        - Chat
+      summary: Получение чата по ID
+      description: Получение чата по ID
+      operationId: getChatById
       parameters:
         - name: id
           in: path
           required: true
-          description: Идентификатор группового чата
+          description: Уникальный идентификатор чата
           schema:
             type: integer
             format: int64
       responses:
         '200':
-          description: Информация о групповом чате
+          description: Чат успешно получен
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GroupChatResponse'
+                $ref: '#/components/schemas/ChatSummaryResponse'
     delete:
       tags:
-        - GroupChat
-      summary: Удаление группового чата
-      description: Удаляет групповой чат по его идентификатору.
-      operationId: deleteGroupChat
+        - Chat
+      summary: Удаление чата
+      description: Удаляет чат по ID.
+      operationId: deleteChat
       parameters:
         - name: id
           in: path
           required: true
-          description: Идентификатор группового чата
+          description: Уникальный идентификатор чата для удаления
           schema:
             type: integer
             format: int64
       responses:
         '204':
-          description: Групповой чат успешно удалён
+          description: Чат успешно удалён
 
-  /api/v1/chat_service/group_chats/{id}/name:
-    put:
+  /api/v1/chat_service/chats/messages/{id}:
+    delete:
       tags:
-        - GroupChat
-      summary: Изменение названия группового чата
-      description: Обновляет название группового чата.
-      operationId: updateGroupChatName
+        - Message
+      summary: Удаление сообщение из чата
+      description: Удаляет сообщение из чата по ID.
+      operationId: deleteChatMessage
       parameters:
         - name: id
           in: path
           required: true
-          description: Идентификатор группового чата
+          description: Уникальный идентификатор сообщения для удаления
           schema:
             type: integer
             format: int64
-        - name: newName
+      responses:
+        '204':
+          description: Сообщение успешно удалёно
+
+  /api/v1/chat_service/chats/me:
+    get:
+      tags:
+        - Chat
+      summary: Получение всех чатов текущего пользователя
+      description: Возвращает список всех чатов, в которых участвует текущий пользователь.
+      operationId: getMyChats
+      parameters:
+        - name: page
           in: query
+          description: Номер страницы
           required: true
-          description: Новое название чата
           schema:
-            type: string
+            type: integer
+            example: 0
+        - name: size
+          in: query
+          description: Размер страницы
+          required: true
+          schema:
+            type: integer
+            example: 10
       responses:
         '200':
-          description: Название чата успешно обновлено
+          description: Список чатов успешно получен
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GroupChatResponse'
+                $ref: '#/components/schemas/ChatPageResponse'
 
-  /api/v1/chat_service/private_chats:
-    post:
-      tags:
-        - PrivateChat
-      summary: Создание приватного чата
-      description: Создаёт приватный чат между текущим пользователем и указанным пользователем.
-      operationId: createPrivateChat
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PrivateChatRequest'
-      responses:
-        '201':
-          description: Приватный чат успешно создан
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PrivateChatResponse'
-
-  /api/v1/chat_service/private_chats/{id}:
+  /api/v1/chat_service/chats/{id}/members:
     get:
       tags:
-        - PrivateChat
-      summary: Получение приватного чата
-      description: Возвращает информацию о приватном чате.
-      operationId: getPrivateChat
+        - ChatMember
+      summary: Получение участников чата
+      description: Получение участников чата
+      operationId: getChatMembers
       parameters:
         - name: id
           in: path
+          description: ID
           required: true
-          description: Идентификатор приватного чата
           schema:
             type: integer
             format: int64
+            example: 0
+        - name: page
+          in: query
+          description: Номер страницы
+          required: true
+          schema:
+            type: integer
+            example: 0
+        - name: size
+          in: query
+          description: Размер страницы
+          required: true
+          schema:
+            type: integer
+            example: 10
       responses:
         '200':
-          description: Информация о приватном чате
+          description: Список участников чата успешно получен
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PrivateChatResponse'
+                $ref: '#/components/schemas/ChatMemberPageResponse'
+
+  /api/v1/chat_service/chats/members/{id}:
     delete:
       tags:
-        - PrivateChat
-      summary: Удаление приватного чата
-      description: Удаляет приватный чат.
-      operationId: deletePrivateChat
+        - ChatMember
+      summary: Удаление пользователя из группового чата
+      description: Удаление пользователя из группового чата
+      operationId: deleteChatMemberById
       parameters:
         - name: id
           in: path
+          description: Уникальный индентификатор участника чата
           required: true
-          description: Идентификатор приватного чата
           schema:
             type: integer
             format: int64
+            example: 0
       responses:
         '204':
-          description: Приватный чат успешно удалён
+          description: Участник успешно удален из группового чата
 
-  /api/v1/chat_service/private_chats/{id}/toggle_visibility:
-    patch:
-      tags:
-        - PrivateChat
-      summary: Переключение видимости приватного чата
-      description: Переключает видимость приватного чата для текущего пользователя.
-      operationId: togglePrivateChatVisibility
-      parameters:
-        - name: id
-          in: path
-          required: true
-          description: Идентификатор приватного чата
-          schema:
-            type: integer
-            format: int64
-      responses:
-        '204':
-          description: Видимость чата успешно изменена
+  /api/v1/chat_service/chats/members/{id}/role:
+        patch:
+          tags:
+            - ChatMember
+          summary: Изменение роли пользователя
+          description: Изменение роли пользователя
+          operationId: changeChatMemberRole
+          parameters:
+            - name: id
+              in: path
+              description: Уникальный индентификатор участника чата
+              required: true
+              schema:
+                type: integer
+                format: int64
+                example: 0
+          requestBody:
+            required: true
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ChangeMemberChatRole'
+          responses:
+            '200':
+              description: Список чатов успешно получен
 
   /api/v1/chat_service/users:
     post:
@@ -245,28 +269,6 @@ paths:
 components:
   schemas:
 
-    PrivateChatResponse:
-      type: object
-      description: Ответ с информацией о приватном чате
-      required:
-        - id
-        - participantUsernames
-      properties:
-        id:
-          type: integer
-          format: int64
-          description: Уникальный идентификатор приватного чата
-          example: 15
-        participantUsernames:
-          type: array
-          description: Список username участников приватного чата
-          uniqueItems: true
-          items:
-            type: string
-          example:
-            - user1
-            - user2
-
     UserResponse:
       type: object
       description: Пользователь чата
@@ -289,30 +291,153 @@ components:
       description: Запрос на подписку на чат
       required:
         - chatId
+        - page
+        - size
       properties:
         chatId:
           type: integer
           format: int64
           description: Уникальный идентификатор чата
+        page:
+          type: integer
+          description: Номер страницы
+        size:
+          type: integer
+          description: Размер страницы
 
     ChatRequest:
       type: object
       description: Запрос на создание чата (группового или приватного)
       required:
-        - isGroup
+        - type
         - participantUsernames
       properties:
         name:
           type: string
           description: Название чата (используется для группового чата)
-        isGroup:
-          type: boolean
-          description: Флаг, указывающий является ли чат групповым
+        type:
+          $ref: '#/components/schemas/ChatType'
+          description: Тип чата
+        members:
+          type: array
+          description: Список имен участников чата
+          items:
+            $ref: '#/components/schemas/ChatMemberRequest'
+
+    ChatMemberPageResponse:
+      allOf:
+        - $ref: '#/components/schemas/Page'
+        - type: object
+          properties:
+            content:
+              type: array
+              items:
+                $ref: '#/components/schemas/ChatMemberResponse'
+
+    ChatMemberResponse:
+      type: object
+      description: Участник чата
+      required:
+        - id
+        - username
+        - role
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Уникальный идентификатор участника чата
+        username:
+          type: string
+          description: Имя пользователя
+        role:
+          $ref: '#/components/schemas/MemberChatRole'
+
+    MessageResponse:
+      type: object
+      description: Сообщение в чате
+      required:
+        - id
+        - sender
+        - content
+        - sendAt
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Уникальный идентификатор сообщения
+        sender:
+          type: string
+          description: Имя пользователя, который отправил сообщение
+        content:
+          type: string
+          description: Содержимое сообщения
+        sendAt:
+          type: string
+          format: date
+          description: Дата и время отправки сообщения
+
+    MessagePageResponse:
+      allOf:
+        - $ref: '#/components/schemas/Page'
+        - type: object
+          properties:
+            content:
+              type: array
+              items:
+                $ref: '#/components/schemas/MessageResponse'
+
+    ChatPageResponse:
+      allOf:
+        - $ref: '#/components/schemas/Page'
+        - type: object
+          properties:
+            content:
+              type: array
+              items:
+                $ref: '#/components/schemas/ChatSummaryResponse'
+
+    ChatFullResponse:
+      type: object
+      description: Чат
+      required:
+        - id
+        - type
+        - participantUsernames
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Идентификатор чата
+        name:
+          type: string
+          description: Название чата (используется для группового чата)
+        type:
+          $ref: '#/components/schemas/ChatType'
+          description: Тип чата
         participantUsernames:
           type: array
           description: Список username участников чата
           items:
             type: string
+
+    ChatSummaryResponse:
+      type: object
+      description: Чат
+      required:
+        - id
+        - type
+        - lastMessage
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Идентификатор чата
+        name:
+          type: string
+          description: Название чата (если он групповой)
+        type:
+          $ref: '#/components/schemas/ChatType'
+          description: Тип чата
 
     MessageRequest:
       type: object
@@ -330,67 +455,69 @@ components:
           format: int64
           description: Уникальный идентификатор чата
 
-    PrivateChatRequest:
+    ChatMemberRequest:
       type: object
-      description: Запрос на создание приватного чата
-      properties:
-        secondUsername:
-          type: string
-          description: Username второго участника приватного чата
-
-    GroupChatRequest:
-      type: object
-      description: Запрос на создание группового чата
-      properties:
-        name:
-          type: string
-          description: Название группового чата
-        participantUsernames:
-          type: array
-          description: Список username участников чата
-          items:
-            type: string
-
-    GroupChatResponse:
-      type: object
-      description: Ответ с информацией о групповом чате
+      description: Запрос на создание участника чата
       required:
-        - id
-        - name
-        - participantUsernames
+        - username
+        - role
       properties:
-        id:
+        username:
+          type: string
+          description: Имя пользователя
+        role:
+          $ref: '#/components/schemas/MemberChatRole'
+          description: Роль участника в чате
+
+    ChangeMemberChatRole:
+      type: object
+      description: Запрос на создание участника чата
+      required:
+        - role
+      properties:
+        role:
+          $ref: '#/components/schemas/MemberChatRole'
+          description: Роль участника в чате
+
+    ChatType:
+      type: string
+      enum:
+        - PRIVATE
+        - GROUP
+
+    MemberChatRole:
+      type: string
+      enum:
+        - OWNER
+        - MODERATOR
+        - MEMBER
+
+    Page:
+      type: object
+      required:
+        - content
+        - number
+        - size
+        - totalElements
+        - totalPages
+      properties:
+        content:
+          type: array
+          description: Массив элементов текущей страницы
+          items: { }
+        number:
+          type: integer
+          example: 1
+        size:
+          type: integer
+          example: 1
+        totalElements:
           type: integer
           format: int64
-          description: Уникальный идентификатор чата
-        name:
-          type: string
-          description: Название группового чата
-        participantUsernames:
-          type: array
-          description: Список username участников чата
-          uniqueItems: true
-          items:
-            type: string
-
-    ChatFullRequest:
-      type: object
-      description: Запрос на создание чата (группового или приватного)
-      required:
-        - isGroup
-        - participantUsernames
-      properties:
-        name:
-          type: string
-          description: Название чата (используется для группового чата)
-        isGroup:
-          type: boolean
-          description: Флаг, указывающий является ли чат групповым
-        participantUsernames:
-          type: array
-          description: Список username участников чата
-          items:
-            type: string
+          example: 1
+        totalPages:
+          type: integer
+          example: 1
 
   securitySchemes:
     bearerAuth:

@@ -80,7 +80,7 @@ openApiGenerate {
             "useJakartaEe" to "true",
             "openApiNullable" to "false",
             "dateLibrary" to "java8",
-            "useSpringController" to "true"
+            "useSpringController" to "true",
         )
     )
 }
@@ -93,10 +93,10 @@ sourceSets {
     }
 }
 
-//tasks.compileJava {
-//    dependsOn(tasks.openApiGenerate)
-//}
+tasks.compileJava {
+    dependsOn(tasks.openApiGenerate)
+}
 
-//tasks.clean {
-//    delete(layout.buildDirectory.dir("generated"))
-//}
+tasks.clean {
+    delete(layout.buildDirectory.dir("generated"))
+}

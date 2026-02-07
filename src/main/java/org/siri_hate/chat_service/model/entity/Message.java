@@ -1,8 +1,6 @@
 package org.siri_hate.chat_service.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-
 import java.time.LocalDateTime;
 
 @Entity
@@ -13,46 +11,48 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String sender;
+    @ManyToOne
+    @JoinColumn(name = "chat_id", nullable = false)
+    private Chat chat;
+
+    @ManyToOne
+    @JoinColumn(name = "sender_id", nullable = false)
+    private User sender;
 
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
-    @Column(name = "chat_id", nullable = false)
-    private Long chatId;
-
     @Column(nullable = false)
-    private LocalDateTime timestamp;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "chat_id", insertable = false, updatable = false)
-    private Chat chat;
-
-    public Message(String sender, String content, Long chatId) {
-        this.sender = sender;
-        this.content = content;
-        this.timestamp = LocalDateTime.now();;
-        this.chatId = chatId;
-    }
+    private LocalDateTime sendAt;
 
     public Message() {
-        this.timestamp = LocalDateTime.now();
+        this.sendAt = LocalDateTime.now();
+    }
+
+    public Message(Chat chat, User sender, String content) {
+        this();
+        this.chat = chat;
+        this.sender = sender;
+        this.content = content;
     }
 
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public Chat getChat() {
+        return chat;
     }
 
-    public String getSender() {
+    public void setChat(Chat chat) {
+        this.chat = chat;
+    }
+
+    public User getSender() {
         return sender;
     }
 
-    public void setSender(String sender) {
+    public void setSender(User sender) {
         this.sender = sender;
     }
 
@@ -64,27 +64,11 @@ public class Message {
         this.content = content;
     }
 
-    public Long getChatId() {
-        return chatId;
+    public LocalDateTime getSendAt() {
+        return sendAt;
     }
 
-    public void setChatId(Long chatId) {
-        this.chatId = chatId;
-    }
-
-    public LocalDateTime getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(LocalDateTime timestamp) {
-        this.timestamp = timestamp;
-    }
-
-    public Chat getChat() {
-        return chat;
-    }
-
-    public void setChat(Chat chat) {
-        this.chat = chat;
+    public void setSendAt(LocalDateTime sendAt) {
+        this.sendAt = sendAt;
     }
 }

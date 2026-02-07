@@ -25,9 +25,10 @@ public class WebSocketController {
     private final ChatService chatService;
 
     @Autowired
-    public WebSocketController(SimpMessagingTemplate messagingTemplate,
-                               MessageService messageService,
-                               ChatService chatService
+    public WebSocketController(
+            SimpMessagingTemplate messagingTemplate,
+            MessageService messageService,
+            ChatService chatService
     )
     {
         this.messagingTemplate = messagingTemplate;
@@ -36,16 +37,21 @@ public class WebSocketController {
     }
 
     @MessageMapping("/chat/{chatId}/send")
-    public void sendMessage(@DestinationVariable Long chatId, @Payload @Validated MessageRequestDTO request, Principal principal) {
+    public void sendMessage(
+            @DestinationVariable Long chatId,
+            @Payload @Validated MessageRequestDTO request,
+            Principal principal
+    )
+    {
         String sender = principal.getName();
-        Message message = messageService.saveMessage(request, sender);
-        messagingTemplate.convertAndSend("/topic/chat/" + chatId, message);
+        var response = messageService.createMessage(sender, request);
+        messagingTemplate.convertAndSend("/topic/chat/%s".formatted(chatId), response);
     }
 
     @MessageMapping("/chat/subscribe")
     public void subscribeToChat(@Payload @Validated SubscribeRequestDTO request) {
-        chatService.getChatById(request.getChatId());
-        List<Message> messages = messageService.getMessagesByChatId(request.getChatId());
-        messagingTemplate.convertAndSend("/topic/chat/" + request.getChatId() + "/history", messages);
+        chatService.getChat(request.getChatId());
+        var response = messageService.getMessages(request);
+        messagingTemplate.convertAndSend("/topic/chat/%s/history".formatted(request.getChatId()), response);
     }
 } 

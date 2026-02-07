@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/chat_service/users")
 public class UserController implements UserApi {
 
     private final UserService userService;
@@ -42,16 +41,4 @@ public class UserController implements UserApi {
         var response = userService.getUserByUsername(username);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
-//    @GetMapping("/{username}/chats")
-//    public ResponseEntity<List<Chat>> getUserChatsByUsername(@PathVariable String username) {
-//        return new ResponseEntity<>(userService.getChatsByUsername(username), HttpStatus.OK);
-//    }
-//
-//    @GetMapping("/me/chats")
-//    public ResponseEntity<List<Chat>> getUserChats() {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        String username = authentication.getName();
-//        return new ResponseEntity<>(userService.getChatsByUsername(username), HttpStatus.OK);
-//    }
 } 

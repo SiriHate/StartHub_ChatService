@@ -120,6 +120,34 @@ paths:
                 $ref: '#/components/schemas/ChatPageResponse'
 
   /api/v1/chat_service/chats/{id}/members:
+    post:
+      tags:
+        - ChatMember
+      summary: Добавление участника в чат
+      description: Добавление участника в чат
+      operationId: createChatMember
+      parameters:
+        - name: id
+          in: path
+          description: ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatMemberRequest'
+      responses:
+        '201':
+          description: Участник успешно добавлен в чат
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatMemberResponse'
     get:
       tags:
         - ChatMember
@@ -373,7 +401,6 @@ components:
           description: Содержимое сообщения
         sendAt:
           type: string
-          format: date
           description: Дата и время отправки сообщения
 
     MessagePageResponse:

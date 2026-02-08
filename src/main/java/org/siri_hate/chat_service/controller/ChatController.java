@@ -2,10 +2,7 @@ package org.siri_hate.chat_service.controller;
 
 import org.siri_hate.chat_service.service.ChatService;
 import org.siri_hate.main_service.api.ChatApi;
-import org.siri_hate.main_service.dto.ChatFullResponseDTO;
-import org.siri_hate.main_service.dto.ChatPageResponseDTO;
-import org.siri_hate.main_service.dto.ChatRequestDTO;
-import org.siri_hate.main_service.dto.ChatSummaryResponseDTO;
+import org.siri_hate.main_service.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

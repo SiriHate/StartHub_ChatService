@@ -17,6 +17,9 @@ public interface MessageMapper {
     Message toMessage(MessageRequestDTO request);
 
     @Mapping(target = "sender", source = "sender.username")
+    @Mapping(target = "sendAt",
+            source = "sendAt",
+            dateFormat = "dd/MM/yyyy HH:mm")
     MessageResponseDTO toMessageResponse(Message message);
 
     MessagePageResponseDTO toMessagePageResponse(Page<Message> messages);

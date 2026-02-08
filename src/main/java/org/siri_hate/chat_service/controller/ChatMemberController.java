@@ -4,6 +4,8 @@ import org.siri_hate.chat_service.service.ChatMemberService;
 import org.siri_hate.main_service.api.ChatMemberApi;
 import org.siri_hate.main_service.dto.ChangeMemberChatRoleDTO;
 import org.siri_hate.main_service.dto.ChatMemberPageResponseDTO;
+import org.siri_hate.main_service.dto.ChatMemberRequestDTO;
+import org.siri_hate.main_service.dto.ChatMemberResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +25,12 @@ public class ChatMemberController implements ChatMemberApi {
     public ResponseEntity<Void> changeChatMemberRole(Long id, ChangeMemberChatRoleDTO changeMemberChatRoleDTO) {
         chatMemberService.changeChatMemberRole(id, changeMemberChatRoleDTO);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<ChatMemberResponseDTO> createChatMember(Long id, ChatMemberRequestDTO chatMemberRequestDTO) {
+        var response = chatMemberService.createChatMember(id, chatMemberRequestDTO);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @Override

@@ -41,10 +41,8 @@ public class ChatController implements ChatApi {
     }
 
     @Override
-    public ResponseEntity<ChatPageResponseDTO> getMyChats(Integer page, Integer size) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-        var response = chatService.getMyChats(username, page, size);
+    public ResponseEntity<ChatPageResponseDTO> getMyChats(Integer page, Integer size, String xUserName) {
+        var response = chatService.getMyChats(xUserName, page, size);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

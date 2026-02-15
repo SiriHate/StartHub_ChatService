@@ -111,6 +111,7 @@ paths:
           schema:
             type: integer
             example: 10
+        - $ref: '#/components/parameters/XUserNameHeader'
       responses:
         '200':
           description: Список чатов успешно получен
@@ -551,3 +552,12 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
+
+  parameters:
+    XUserNameHeader:
+      name: X-User-Name
+      in: header
+      description: "Имя пользователя, проставляется Gateway"
+      required: true
+      schema:
+        type: string

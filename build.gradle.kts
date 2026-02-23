@@ -19,7 +19,7 @@ repositories {
     mavenCentral()
 }
 
-val jjwtVersion = "0.11.5"
+val awsSdkVersion = "2.37.3"
 val mapstructVersion = "1.5.5.Final"
 val logstashEncoderVersion = "8.1"
 val logbackClassicVersion = "1.5.18"
@@ -32,10 +32,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.kafka:spring-kafka")
+    implementation("software.amazon.awssdk:s3:$awsSdkVersion")
     runtimeOnly("org.postgresql:postgresql")
-    implementation("io.jsonwebtoken:jjwt-api:$jjwtVersion")
-    runtimeOnly("io.jsonwebtoken:jjwt-impl:$jjwtVersion")
-    runtimeOnly("io.jsonwebtoken:jjwt-jackson:$jjwtVersion")
     implementation("org.mapstruct:mapstruct:$mapstructVersion")
     annotationProcessor("org.mapstruct:mapstruct-processor:$mapstructVersion")
     implementation("net.logstash.logback:logstash-logback-encoder:$logstashEncoderVersion")

@@ -4,9 +4,6 @@ info:
   version: 1.0.0
   description: OpenAPI спецификация для основного сервиса
 
-security:
-  - bearerAuth: [ ]
-
 paths:
 
   /api/v1/chat_service/chats:
@@ -16,6 +13,8 @@ paths:
       summary: Создание чата
       description: Создаёт новый чат (групповой или приватный).
       operationId: createChat
+      parameters:
+        - $ref: '#/components/parameters/XUserNameHeader'
       requestBody:
         required: true
         content:
@@ -232,6 +231,40 @@ paths:
             '200':
               description: Список чатов успешно получен
 
+  /api/v1/chat_service/chats/{chatId}/images:
+    post:
+      tags:
+        - ChatImage
+      summary: Загрузка изображения для чата
+      operationId: uploadChatImage
+      parameters:
+        - name: chatId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - $ref: '#/components/parameters/XUserNameHeader'
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - file
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Изображение загружено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImageUploadResponse'
+
   /api/v1/chat_service/users:
     post:
       tags:
@@ -387,7 +420,6 @@ components:
       required:
         - id
         - sender
-        - content
         - sendAt
       properties:
         id:
@@ -400,6 +432,9 @@ components:
         content:
           type: string
           description: Содержимое сообщения
+        imageUrl:
+          type: string
+          description: Presigned URL изображения
         sendAt:
           type: string
           description: Дата и время отправки сообщения
@@ -471,17 +506,27 @@ components:
       type: object
       description: Запрос на отправку сообщения
       required:
-        - content
         - chatId
       properties:
         content:
           type: string
           description: Текст сообщения
-          minLength: 1
+        imageKey:
+          type: string
+          description: Ключ загруженного изображения
         chatId:
           type: integer
           format: int64
           description: Уникальный идентификатор чата
+
+    ImageUploadResponse:
+      type: object
+      required:
+        - imageKey
+      properties:
+        imageKey:
+          type: string
+          description: Ключ загруженного изображения в S3
 
     ChatMemberRequest:
       type: object
@@ -546,12 +591,6 @@ components:
         totalPages:
           type: integer
           example: 1
-
-  securitySchemes:
-    bearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
 
   parameters:
     XUserNameHeader:

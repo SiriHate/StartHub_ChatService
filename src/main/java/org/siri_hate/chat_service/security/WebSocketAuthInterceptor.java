@@ -1,53 +1,54 @@
 package org.siri_hate.chat_service.security;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
-import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.messaging.support.MessageHeaderAccessor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 @Component
 public class WebSocketAuthInterceptor implements ChannelInterceptor {
 
-    private final JWTService jwtService;
-    private final UserDetailsService userDetailsService;
-
-    public WebSocketAuthInterceptor(JWTService jwtService, UserDetailsService userDetailsService) {
-        this.jwtService = jwtService;
-        this.userDetailsService = userDetailsService;
-    }
+    private static final Logger log = LoggerFactory.getLogger(WebSocketAuthInterceptor.class);
 
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
         StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
+        if (accessor == null) return message;
 
-        if (StompCommand.CONNECT.equals(accessor.getCommand())) {
-            String token = accessor.getFirstNativeHeader("Authorization");
+        if (accessor.getUser() != null) return message;
 
-            if (token.startsWith("Bearer ")) {
-                token = token.substring(7);
+        Map<String, Object> sessionAttributes = accessor.getSessionAttributes();
+        if (sessionAttributes == null) return message;
 
-                if (jwtService.validateToken(token)) {
-                    String username = jwtService.extractUsername(token);
-                    UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-
-                    Authentication authentication = new UsernamePasswordAuthenticationToken(
-                            userDetails, null, userDetails.getAuthorities()
-                    );
-
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
-                    accessor.setUser(authentication);
-                }
-            }
+        String username = (String) sessionAttributes.get("username");
+        if (username == null || username.isBlank()) {
+            log.warn("WebSocket: missing username in session attributes");
+            return message;
         }
+
+        String rolesStr = (String) sessionAttributes.get("roles");
+        List<SimpleGrantedAuthority> authorities = List.of();
+        if (rolesStr != null && !rolesStr.isBlank()) {
+            authorities = Arrays.stream(rolesStr.split(","))
+                    .map(String::trim)
+                    .filter(r -> !r.isEmpty())
+                    .map(SimpleGrantedAuthority::new)
+                    .toList();
+        }
+
+        var authentication = new UsernamePasswordAuthenticationToken(username, null, authorities);
+        accessor.setUser(authentication);
 
         return message;
     }
-} 
+}

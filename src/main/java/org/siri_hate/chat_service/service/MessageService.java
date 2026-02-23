@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 
 @Service
 public class MessageService {
@@ -20,19 +21,21 @@ public class MessageService {
     private final MessageMapper messageMapper;
     private final UserService userService;
     private final ChatService chatService;
+    private final FileService fileService;
 
     @Autowired
     public MessageService(
             MessageRepository messageRepository,
             MessageMapper messageMapper,
             UserService userService,
-            ChatService chatService
-    )
-    {
+            ChatService chatService,
+            FileService fileService
+    ) {
         this.messageRepository = messageRepository;
         this.messageMapper = messageMapper;
         this.userService = userService;
         this.chatService = chatService;
+        this.fileService = fileService;
     }
 
     public MessageResponseDTO createMessage(String senderUsername, MessageRequestDTO request) {
@@ -40,7 +43,7 @@ public class MessageService {
         message.setSender(userService.getOrCreateUser(senderUsername));
         message.setChat(chatService.getChatEntity(request.getChatId()));
         messageRepository.save(message);
-        return messageMapper.toMessageResponse(message);
+        return enrichWithImageUrl(messageMapper.toMessageResponse(message), message.getImageKey());
     }
 
     public MessagePageResponseDTO getMessages(SubscribeRequestDTO request) {
@@ -48,10 +51,25 @@ public class MessageService {
                 request.getChatId(),
                 PageRequest.of(request.getPage(), request.getSize())
         );
-        return messageMapper.toMessagePageResponse(messages);
+        MessagePageResponseDTO response = messageMapper.toMessagePageResponse(messages);
+        List<Message> messageList = messages.getContent();
+        List<MessageResponseDTO> dtoList = response.getContent();
+        if (dtoList != null) {
+            for (int i = 0; i < dtoList.size(); i++) {
+                enrichWithImageUrl(dtoList.get(i), messageList.get(i).getImageKey());
+            }
+        }
+        return response;
     }
 
     public void deleteMessage(Long messageId) {
         messageRepository.deleteById(messageId);
     }
-} 
+
+    private MessageResponseDTO enrichWithImageUrl(MessageResponseDTO dto, String imageKey) {
+        if (imageKey != null && !imageKey.isBlank()) {
+            dto.setImageUrl(fileService.getPresignedUrl(imageKey));
+        }
+        return dto;
+    }
+}

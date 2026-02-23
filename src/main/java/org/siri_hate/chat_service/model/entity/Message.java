@@ -19,8 +19,11 @@ public class Message {
     @JoinColumn(name = "sender_id", nullable = false)
     private User sender;
 
-    @Column(nullable = false, columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT")
     private String content;
+
+    @Column(name = "image_key")
+    private String imageKey;
 
     @Column(nullable = false)
     private LocalDateTime sendAt;
@@ -29,46 +32,20 @@ public class Message {
         this.sendAt = LocalDateTime.now();
     }
 
-    public Message(Chat chat, User sender, String content) {
-        this();
-        this.chat = chat;
-        this.sender = sender;
-        this.content = content;
-    }
+    public Long getId() { return id; }
 
-    public Long getId() {
-        return id;
-    }
+    public Chat getChat() { return chat; }
+    public void setChat(Chat chat) { this.chat = chat; }
 
-    public Chat getChat() {
-        return chat;
-    }
+    public User getSender() { return sender; }
+    public void setSender(User sender) { this.sender = sender; }
 
-    public void setChat(Chat chat) {
-        this.chat = chat;
-    }
+    public String getContent() { return content; }
+    public void setContent(String content) { this.content = content; }
 
-    public User getSender() {
-        return sender;
-    }
+    public String getImageKey() { return imageKey; }
+    public void setImageKey(String imageKey) { this.imageKey = imageKey; }
 
-    public void setSender(User sender) {
-        this.sender = sender;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public LocalDateTime getSendAt() {
-        return sendAt;
-    }
-
-    public void setSendAt(LocalDateTime sendAt) {
-        this.sendAt = sendAt;
-    }
+    public LocalDateTime getSendAt() { return sendAt; }
+    public void setSendAt(LocalDateTime sendAt) { this.sendAt = sendAt; }
 }

@@ -14,12 +14,13 @@ import org.springframework.data.domain.Page;
         unmappedTargetPolicy = ReportingPolicy.IGNORE
 )
 public interface MessageMapper {
+
+    @Mapping(target = "imageKey", source = "imageKey")
     Message toMessage(MessageRequestDTO request);
 
     @Mapping(target = "sender", source = "sender.username")
-    @Mapping(target = "sendAt",
-            source = "sendAt",
-            dateFormat = "dd/MM/yyyy HH:mm")
+    @Mapping(target = "sendAt", source = "sendAt", dateFormat = "dd/MM/yyyy HH:mm")
+    @Mapping(target = "imageUrl", ignore = true)
     MessageResponseDTO toMessageResponse(Message message);
 
     MessagePageResponseDTO toMessagePageResponse(Page<Message> messages);

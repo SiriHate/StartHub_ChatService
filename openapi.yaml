@@ -139,8 +139,8 @@ paths:
                   type: integer
                   format: int64
 
-  /api/v1/chat_service/chats/{id}/notifications/mute:
-    post:
+  /api/v1/chat_service/chats/{id}/notifications/muted:
+    put:
       tags:
         - Chat
       summary: Заглушить уведомления чата

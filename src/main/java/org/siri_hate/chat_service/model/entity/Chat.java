@@ -3,6 +3,7 @@ package org.siri_hate.chat_service.model.entity;
 import jakarta.persistence.*;
 import org.siri_hate.chat_service.model.enums.ChatType;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +26,12 @@ public class Chat {
 
     @OneToMany(mappedBy = "chat", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Message> messages = new ArrayList<>();
+
+    @Transient
+    private String lastMessage;
+
+    @Transient
+    private LocalDateTime lastMessageAt;
 
     public Chat() {}
 
@@ -73,6 +80,22 @@ public class Chat {
 
     public void setMessages(List<Message> messages) {
         this.messages = messages;
+    }
+
+    public String getLastMessage() {
+        return lastMessage;
+    }
+
+    public void setLastMessage(String lastMessage) {
+        this.lastMessage = lastMessage;
+    }
+
+    public LocalDateTime getLastMessageAt() {
+        return lastMessageAt;
+    }
+
+    public void setLastMessageAt(LocalDateTime lastMessageAt) {
+        this.lastMessageAt = lastMessageAt;
     }
 }
 

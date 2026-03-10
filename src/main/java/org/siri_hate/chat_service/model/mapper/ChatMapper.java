@@ -1,15 +1,15 @@
 package org.siri_hate.chat_service.model.mapper;
 
-import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 import org.siri_hate.chat_service.model.entity.Chat;
-import org.siri_hate.chat_service.model.entity.ChatMember;
-import org.siri_hate.main_service.dto.*;
+import org.siri_hate.chat_service.dto.*;
 import org.springframework.data.domain.Page;
 
-import java.util.List;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 
 @Mapper(
         componentModel = "spring",
@@ -28,4 +28,8 @@ public interface ChatMapper {
     ChatFullResponseDTO toChatFullResponse(Chat chat);
 
     ChatPageResponseDTO toChatPageResponse(Page<Chat> chats);
+
+    default OffsetDateTime map(LocalDateTime value) {
+        return value == null ? null : value.atOffset(ZoneOffset.UTC);
+    }
 }

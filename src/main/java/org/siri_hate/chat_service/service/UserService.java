@@ -5,7 +5,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.siri_hate.chat_service.model.entity.User;
 import org.siri_hate.chat_service.model.mapper.UserMapper;
 import org.siri_hate.chat_service.repository.UserRepository;
-import org.siri_hate.main_service.dto.UserResponseDTO;
+import org.siri_hate.chat_service.dto.UserResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

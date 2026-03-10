@@ -29,12 +29,16 @@ public class ChatMember {
     @Enumerated(EnumType.STRING)
     private ChatRole role;
 
+    @Column(name = "muted_notifications", nullable = false, columnDefinition = "boolean default false")
+    private boolean mutedNotifications;
+
     public ChatMember() {}
 
     public ChatMember(Chat chat, User user, ChatRole role) {
         this.chat = chat;
         this.user = user;
         this.role = role;
+        this.mutedNotifications = false;
     }
 
     public Long getId() {
@@ -63,5 +67,13 @@ public class ChatMember {
 
     public void setRole(ChatRole role) {
         this.role = role;
+    }
+
+    public boolean isMutedNotifications() {
+        return mutedNotifications;
+    }
+
+    public void setMutedNotifications(boolean mutedNotifications) {
+        this.mutedNotifications = mutedNotifications;
     }
 }

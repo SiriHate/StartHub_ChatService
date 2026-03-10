@@ -4,9 +4,9 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 import org.siri_hate.chat_service.model.entity.Message;
-import org.siri_hate.main_service.dto.MessagePageResponseDTO;
-import org.siri_hate.main_service.dto.MessageRequestDTO;
-import org.siri_hate.main_service.dto.MessageResponseDTO;
+import org.siri_hate.chat_service.dto.MessagePageResponseDTO;
+import org.siri_hate.chat_service.dto.MessageRequestDTO;
+import org.siri_hate.chat_service.dto.MessageResponseDTO;
 import org.springframework.data.domain.Page;
 
 @Mapper(

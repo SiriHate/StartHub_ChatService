@@ -3,7 +3,7 @@ package org.siri_hate.chat_service.model.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 import org.siri_hate.chat_service.model.entity.User;
-import org.siri_hate.main_service.dto.UserResponseDTO;
+import org.siri_hate.chat_service.dto.UserResponseDTO;
 
 @Mapper(
         componentModel = "spring",

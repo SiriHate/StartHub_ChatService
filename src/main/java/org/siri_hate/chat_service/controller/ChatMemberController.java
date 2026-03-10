@@ -1,11 +1,11 @@
 package org.siri_hate.chat_service.controller;
 
 import org.siri_hate.chat_service.service.ChatMemberService;
-import org.siri_hate.main_service.api.ChatMemberApi;
-import org.siri_hate.main_service.dto.ChangeMemberChatRoleDTO;
-import org.siri_hate.main_service.dto.ChatMemberPageResponseDTO;
-import org.siri_hate.main_service.dto.ChatMemberRequestDTO;
-import org.siri_hate.main_service.dto.ChatMemberResponseDTO;
+import org.siri_hate.chat_service.api.ChatMemberApi;
+import org.siri_hate.chat_service.dto.ChangeMemberChatRoleDTO;
+import org.siri_hate.chat_service.dto.ChatMemberPageResponseDTO;
+import org.siri_hate.chat_service.dto.ChatMemberRequestDTO;
+import org.siri_hate.chat_service.dto.ChatMemberResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

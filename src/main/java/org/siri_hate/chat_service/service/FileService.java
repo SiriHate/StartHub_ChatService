@@ -24,6 +24,7 @@ public class FileService {
 
     private static final Map<String, String> ALLOWED_TYPES = Map.of(
             "image/jpeg", ".jpg",
+            "image/jpg", ".jpg",
             "image/png", ".png",
             "image/webp", ".webp",
             "image/gif", ".gif"

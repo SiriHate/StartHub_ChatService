@@ -1,7 +1,7 @@
 package org.siri_hate.chat_service.controller;
 
 import org.siri_hate.chat_service.service.MessageService;
-import org.siri_hate.main_service.api.MessageApi;
+import org.siri_hate.chat_service.api.MessageApi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

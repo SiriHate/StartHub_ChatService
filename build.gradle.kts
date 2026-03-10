@@ -60,8 +60,8 @@ openApiGenerate {
             .asFile
             .absolutePath
     )
-    apiPackage.set("org.siri_hate.main_service.api")
-    modelPackage.set("org.siri_hate.main_service.dto")
+    apiPackage.set("org.siri_hate.chat_service.api")
+    modelPackage.set("org.siri_hate.chat_service.dto")
     modelNameSuffix.set("DTO")
     importMappings.set(
         mapOf(

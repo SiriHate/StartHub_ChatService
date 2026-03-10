@@ -1,8 +1,8 @@
 package org.siri_hate.chat_service.controller;
 
 import org.siri_hate.chat_service.service.FileService;
-import org.siri_hate.main_service.api.ChatImageApi;
-import org.siri_hate.main_service.dto.ImageUploadResponseDTO;
+import org.siri_hate.chat_service.api.ChatImageApi;
+import org.siri_hate.chat_service.dto.ImageUploadResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;

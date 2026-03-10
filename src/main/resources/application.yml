@@ -20,6 +20,8 @@ spring:
       max-request-size: 10MB
   aop:
     proxy-target-class: false
+  kafka:
+    bootstrap-servers: localhost:9092
 
 server:
   address: localhost
@@ -41,3 +43,9 @@ management:
     web:
       exposure:
         include: health,info,prometheus
+
+notification:
+  topic:
+    chat-message: chat_message_notification_topic
+  service:
+    url: http://localhost:8082/api/v1/notification_service/internal/chat-message

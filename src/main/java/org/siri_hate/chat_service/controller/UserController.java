@@ -1,8 +1,8 @@
 package org.siri_hate.chat_service.controller;
 
 import org.siri_hate.chat_service.service.UserService;
-import org.siri_hate.main_service.api.UserApi;
-import org.siri_hate.main_service.dto.UserResponseDTO;
+import org.siri_hate.chat_service.api.UserApi;
+import org.siri_hate.chat_service.dto.UserResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,12 +1,14 @@
 package org.siri_hate.chat_service.controller;
 
 import org.siri_hate.chat_service.service.ChatService;
-import org.siri_hate.main_service.api.ChatApi;
-import org.siri_hate.main_service.dto.*;
+import org.siri_hate.chat_service.api.ChatApi;
+import org.siri_hate.chat_service.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 public class ChatController implements ChatApi {
@@ -40,5 +42,22 @@ public class ChatController implements ChatApi {
     public ResponseEntity<ChatPageResponseDTO> getMyChats(Integer page, Integer size, String xUserName) {
         var response = chatService.getMyChats(xUserName, page, size);
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<List<Long>> getMutedChats(String xUserName) {
+        return new ResponseEntity<>(chatService.getMutedChats(xUserName), HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<Void> muteChatNotifications(Long id, String xUserName) {
+        chatService.muteChat(id, xUserName);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @Override
+    public ResponseEntity<Void> unmuteChatNotifications(Long id, String xUserName) {
+        chatService.unmuteChat(id, xUserName);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
